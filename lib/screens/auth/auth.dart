@@ -41,7 +41,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   width: 300,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(150), topRight: Radius.circular(150)),
-                    image: DecorationImage(image: AssetImage("assets/pexels-photo-106399.jpeg"),
+                    image: DecorationImage(image: AssetImage("assets/house.png"),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -65,7 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         height: 50,
                         child:  GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, '/auth');
+                            Navigator.pushNamed(context, '/register');
                           },
                           child: Center(
                             child: Text(
@@ -89,11 +89,11 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         child:  GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, '/auth');
+                            Navigator.pushNamed(context, '/login');
                           },
                           child: Center(
                             child: Text(
-                              "SignUp",
+                              "Login",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
