@@ -27,7 +27,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(widget.labelTxt, style: TextStyle(
-          color: Colors.white,
+          color: Colors.black,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),),
@@ -37,7 +37,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           keyboardType: widget.keyboardType,
           obscureText: widget.obsureText,
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
           ),
           decoration: InputDecoration(
               filled: true,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_class_git/widgets/custom.textfield.widget.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -8,6 +9,41 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  bool _isloading = false;
+
+  //LOGIN FUNCTION
+  Future<void> loginUser({
+    required String email,
+    required String password
+    }) async{
+
+    try{
+      setState(() {
+        _isloading = true;
+      });
+      final supabase = Supabase.instance.client;
+
+      final response = await supabase.auth.signInWithPassword(
+          email: email,
+          password: password
+      );
+      final user = response.user;
+      if(user == null){
+        print("Login failed");
+      }
+      else{
+        print("login successful");
+        Navigator.pushReplacementNamed(context, '/home');}
+    }
+    catch(e){
+      print("Error at login: $e");
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,12 +94,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintTxt: "loe@gmail.com",
                     keyboardType: TextInputType.emailAddress,
                     obsureText: false,
+                    controller: _email,
                   ),
                   CustomTextField(
                     labelTxt: "Password",
                     hintTxt: "*******",
                     keyboardType: TextInputType.visiblePassword,
                     obsureText: false,
+                    controller: _password,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -85,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/login');
+                            loginUser(email: _email.text, password: _password.text);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromRGBO(74, 67, 236, 1.0),
