@@ -5,6 +5,7 @@ import 'package:flutter_class_git/screens/auth/login.dart';
 import 'package:flutter_class_git/screens/auth/register.dart';
 import 'package:flutter_class_git/screens/splash.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'bottomnav.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/dashboard': (context) =>  DashboardScreen(),
+        '/home': (context) => BottomNav(),
       },
     );
   }

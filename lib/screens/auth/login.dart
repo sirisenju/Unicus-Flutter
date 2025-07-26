@@ -36,7 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       else{
         print("login successful");
-        Navigator.pushReplacementNamed(context, '/home');}
+        if(!mounted) return;
+          Navigator.pushReplacementNamed(context, '/home');}
     }
     catch(e){
       print("Error at login: $e");
@@ -124,7 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             loginUser(email: _email.text, password: _password.text);
-                            Navigator.pushReplacementNamed(context, '/dashboard');
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromRGBO(74, 67, 236, 1.0),
