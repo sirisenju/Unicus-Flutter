@@ -124,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             loginUser(email: _email.text, password: _password.text);
+                            Navigator.pushReplacementNamed(context, '/dashboard');
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromRGBO(74, 67, 236, 1.0),

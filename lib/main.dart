@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_class_git/dashboard.dart';
 import 'package:flutter_class_git/screens/auth/auth.dart';
 import 'package:flutter_class_git/screens/auth/login.dart';
 import 'package:flutter_class_git/screens/auth/register.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/auth': (context) => const AuthScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/dashboard': (context) =>  DashboardScreen(),
       },
     );
   }
