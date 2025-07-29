@@ -104,44 +104,6 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                       )),
-                      // Expanded(child: Container(
-                      //   height: 70,
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //       onSubmit();
-                      //       Navigator.pushReplacementNamed(context, '/home');
-                      //     },
-                      //     style: ElevatedButton.styleFrom(
-                      //       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(5),
-                      //       ),
-                      //     ),
-                      //     child: Text("Submit", style: TextStyle(
-                      //         color: Colors.black
-                      //     ),),
-                      //   ),
-                      //
-                      // )),
-                      // Expanded(child: Container(
-                      //   height: 70,
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //       onSubmit();
-                      //       Navigator.pushReplacementNamed(context, '/home');
-                      //     },
-                      //     style: ElevatedButton.styleFrom(
-                      //       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(5),
-                      //       ),
-                      //     ),
-                      //     child: Text("Submit", style: TextStyle(
-                      //         color: Colors.black
-                      //     ),),
-                      //   ),
-                      //
-                      // )),
                     ],
                   ),
                 ),

@@ -31,13 +31,27 @@ class _LoginScreenState extends State<LoginScreen> {
           password: password
       );
       final user = response.user;
+      print("User response: $user");
+      final profile = user!.role;
+      final profileResponse = await supabase
+          .from('users')
+          .select()
+          .eq('user_id', user.id)
+          .single();
+
+      print("Profile Resposne: $profileResponse");
+      final status = profileResponse["role"];
+      print("Status: $status");
+
+      if(status == "admin"){
+        Navigator.pushReplacementNamed(context, '/admin');
+      }
+      else{
+        Navigator.pushReplacementNamed(context, '/home');
+      }
       if(user == null){
         print("Login failed");
       }
-      else{
-        print("login successful");
-        if(!mounted) return;
-          Navigator.pushReplacementNamed(context, '/home');}
     }
     catch(e){
       print("Error at login: $e");
