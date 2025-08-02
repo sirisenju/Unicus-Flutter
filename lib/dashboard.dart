@@ -1,10 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../widgets/propertycard.dart';
 import '../widgets/owned_property_tile.dart';
 import '../widgets/categoryitem.dart';
+import 'main.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  Future<void> logout() async {
+    await supabase.auth.signOut();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +29,10 @@ class DashboardScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Welcome Favour', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
@@ -25,9 +41,15 @@ class DashboardScreen extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    CircleAvatar(child: Icon(Icons.notifications_none)),
-                    SizedBox(width: 8),
-                    CircleAvatar(child: Icon(Icons.settings)),
+                    const CircleAvatar(child: Icon(Icons.notifications_none)),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () {
+                        logout();
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                      child: const CircleAvatar(child: Icon(Icons.logout)),
+                    )
                   ],
                 )
               ],

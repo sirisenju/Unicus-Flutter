@@ -133,26 +133,38 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Row(
                     children: [
-                      Expanded(child: SizedBox(
-                        height: 50,
-
-                        child: ElevatedButton(
-                          onPressed: () {
-                            loginUser(email: _email.text, password: _password.text);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(74, 67, 236, 1.0),
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(60),
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: _isloading
+                                ? null // Disable button if loading
+                                : () {
+                              loginUser(
+                                email: _email.text.trim(),
+                                password: _password.text.trim(),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color.fromRGBO(74, 67, 236, 1.0),
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(60),
+                              ),
+                            ),
+                            child: _isloading
+                                ? CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              strokeWidth: 2.5,
+                            )
+                                : Text(
+                              "Login",
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
-                          child: Text("Login", style: TextStyle(
-                              color: Colors.white
-                          ),),
                         ),
+                      )
 
-                      ))
                     ],
                   ),
                 ],

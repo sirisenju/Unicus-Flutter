@@ -172,36 +172,62 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       Row(
                         children: [
-                          Expanded(child: SizedBox(
-                            height: 50,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if(_passwordController.text == _confirmPasswordController.text){
-                                  print('Match password');
-                                  signUpUser(
-                                      firstName: _firstNameController.text,
-                                      lastName:  _lastNameController.text,
-                                      email: _emailController.text,
-                                      password: _passwordController.text
-                                  );
-                                  Navigator.pushNamed(context, '/login');
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromRGBO(74, 67, 236, 1.0),
-                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(60),
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: _isloading
+                                    ? null
+                                    : () async {
+                                  if (_passwordController.text == _confirmPasswordController.text) {
+                                    setState(() {
+                                      _isloading = true;
+                                    });
+
+                                    try {
+                                      print('Match password');
+                                      await signUpUser(
+                                        firstName: _firstNameController.text,
+                                        lastName: _lastNameController.text,
+                                        email: _emailController.text,
+                                        password: _passwordController.text,
+                                      );
+                                      Navigator.pushNamed(context, '/login');
+                                    } catch (e) {
+                                      print("Signup error: $e");
+                                    } finally {
+                                      setState(() {
+                                        _isloading = false;
+                                      });
+                                    }
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color.fromRGBO(74, 67, 236, 1.0),
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(60),
+                                  ),
+                                ),
+                                child: _isloading
+                                    ? SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                                    : Text(
+                                  "Sign Up",
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                              child: Text("Sign Up", style: TextStyle(
-                                  color: Colors.white
-                              ),),
                             ),
-
-                          ))
+                          )
                         ],
                       ),
+
                     ],
                   ),
                 ),
