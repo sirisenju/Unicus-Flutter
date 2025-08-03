@@ -5,14 +5,22 @@ import 'screens/listings.dart';
 import 'screens/earnings.dart';
 
 class BottomNav extends StatefulWidget {
-  const BottomNav({super.key});
+  final int initialIndex;
+  const BottomNav({super.key, this.initialIndex = 0});
 
   @override
   _BottomNavState createState() => _BottomNavState();
 }
 
 class _BottomNavState extends State<BottomNav> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   final List<Widget> _pages = [
     DashboardScreen(),
