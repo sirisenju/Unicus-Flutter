@@ -4,8 +4,10 @@ import 'package:flutter_class_git/screens/admin/dashboard.dart';
 import 'package:flutter_class_git/screens/auth/auth.dart';
 import 'package:flutter_class_git/screens/auth/login.dart';
 import 'package:flutter_class_git/screens/auth/register.dart';
+import 'package:flutter_class_git/screens/chat.dart';
 import 'package:flutter_class_git/screens/splash.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_class_git/screens/chatdetail.dart';
 import 'bottomnav.dart';
 
 Future<void> main() async {
@@ -42,6 +44,10 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) =>  DashboardScreen(),
         '/admin': (context) =>  AdminDashboard(),
         '/home': (context) => BottomNav(),
+        '/chats': (context) => ChatDetail(),
+        '/chat': (context) => ChatScreen(),
+
+
       },
     );
   }
