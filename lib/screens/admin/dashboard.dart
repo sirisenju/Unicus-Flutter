@@ -5,8 +5,8 @@ import 'package:flutter_class_git/widgets/custom.selected.button.dart';
 import 'package:flutter_class_git/widgets/custom.textfield.widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../main.dart';
+// import 'package:image/image.dart' as img;
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
 
@@ -15,46 +15,113 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+
+  final TextEditingController _location = TextEditingController();
+  final TextEditingController _price = TextEditingController();
+  final TextEditingController _bedrooms = TextEditingController();
+  final TextEditingController _bathrooms = TextEditingController();
+  final TextEditingController _description = TextEditingController();
+  // final TextEditingController _is_available = TextEditingController();
+  final TextEditingController _size_sqft = TextEditingController();
+
   String selectedListingType = "";
   String selectedPropertyType = "";
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
 
   //logout function
   Future<void> logout() async {
     await supabase.auth.signOut();
   }
 
-  //image picker
-  Future<String?> pickImage() async{
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if(pickedImage != null){
-      return pickedImage.path;
+  //pickImage
+  Future<void> pickImage() async{
+    try{
+      final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+      print("Picked image: ${pickedImage!.path}");
+      if(pickedImage != null){
+        setState(() {
+          _selectedImage = File(pickedImage.path);
+          print("Selected image: ${_selectedImage!.path}");
+        });
+      }
     }
-
-    final file = File(pickedImage!.path);
-    final fileBytes = await file.readAsBytes();
-    final filename = file.path.split('/').last;
-    print(filename);
-
-    final supabase = Supabase.instance.client;
-    final uplaodResposne = await supabase.storage
-        .from('property_images')
-        .uploadBinary(
-        filename,
-        fileBytes,
-        fileOptions: const FileOptions(
-          upsert: true,
-        )
-    );
-
-    if(uplaodResposne.isEmpty){
-      throw Exception('Failed to upload image');
+    catch(e){
+      print("Error picking image: $e");
     }
-
-    final imageUrl = supabase.storage.from('property_images').getPublicUrl(filename);
-    return imageUrl;
   }
 
+
+
+  //upload image to storage bucket
+  Future<String?> uploadImage(File imageFile) async{
+
+    try{
+      final fileBytes = await imageFile.readAsBytes();
+      final filename = imageFile.path.split('/').last;
+
+      final supabase = Supabase.instance.client;
+      final uplaodResposne = await supabase.storage
+          .from('property-images')
+          .uploadBinary(
+          filename,
+          fileBytes,
+          fileOptions: const FileOptions(
+            upsert: true,
+          )
+      );
+
+
+      if(uplaodResposne.isEmpty){
+        throw Exception('Failed to upload image');
+      }
+
+      final imageUrl = supabase.storage.from('property-images').getPublicUrl(filename);
+      return imageUrl;
+    }
+    catch(e){
+      print("Upload error: $e");
+    }
+  }
+
+  //upload property
+  void uploadProperty() async{
+    if(_selectedImage == null){
+      print("no image selected");
+      return;
+    }
+
+    final imageUrl = await uploadImage(_selectedImage!);
+
+    if(imageUrl != null){
+      //insert to supabase
+      final response = await supabase.from('properties').insert({
+        'owner_id': Supabase.instance.client.auth.currentUser!.id,
+        'location': _location.text,
+        'price': int.parse(_price.text),               //  convert to int
+        'size_sqft': int.parse(_size_sqft.text),       //  convert to int
+        'bedrooms': int.parse(_bedrooms.text),            //  convert to int
+        'bathrooms': int.parse(_bathrooms.text),          //  convert to int
+        'description': _description.text,
+        'property_type': selectedPropertyType,
+        // 'listing_type': selectedListingType,
+        'image_url': imageUrl,
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
+        'is_available': "Yes",
+      });
+
+      if(response.error != null){
+        print("Error: ${response.error}");
+      }
+      else{
+        print("Success: ${response.data}");
+      }
+    }
+    else{
+      print("No image selected");
+    }
+  }
 
 
   @override
@@ -86,7 +153,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: 1000,
+                  height: 1200,
                   color: Color.fromRGBO(243, 243, 249, 1.0),
                   child: Padding(
                       padding: EdgeInsets.all(15),
@@ -129,7 +196,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     SizedBox(
                                       height: 10,
                                     ),
-        
                                     CustomSelectableButtons(
                                       options: ['Rent', 'Sale'],
                                       onSelected: (value) {
@@ -151,6 +217,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               },
                               child: Text("Pick image")
                           ),
+                          // Container(
+                          //   child: _selectedImage! != null ? Image.file(_selectedImage!, height: 100,) :
+                          //   Text("No image selected.") ,
+                          // ),
                           SizedBox(
                             height: 10,
                           ),
@@ -159,18 +229,38 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               hintTxt: "Enter size of the property",
                               keyboardType: TextInputType.number,
                               obsureText: false,
+                              controller: _size_sqft,
+
+                          ),
+                          CustomTextField(
+                            labelTxt: "Location",
+                            hintTxt: "Enter Location of the property",
+                            keyboardType: TextInputType.number,
+                            obsureText: false,
+                            controller: _location,
+
+                          ),
+                          CustomTextField(
+                            labelTxt: "Bathroom",
+                            hintTxt: "Enter Number Of Bathrooms",
+                            keyboardType: TextInputType.number,
+                            obsureText: false,
+                            controller: _bathrooms,
+
                           ),
                           CustomTextField(
                             labelTxt: "Price",
                             hintTxt: "Enter price of the property",
                             keyboardType: TextInputType.number,
                             obsureText: false,
+                            controller: _price,
                           ),
                           CustomTextField(
                             labelTxt: "Bedrooms",
                             hintTxt: "Enter Numbers of the Bedrooms",
                             keyboardType: TextInputType.number,
                             obsureText: false,
+                            controller: _bedrooms,
                           ),
                           Container(
                             height: 110,
@@ -211,15 +301,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               keyboardType: TextInputType.text,
                               obsureText: false,
                               isTextArea: true,
+                              controller: _description,
                           ),
                           Row(
                             children: [
                               Expanded(child: SizedBox(
                                 height: 50,
-
                                 child: ElevatedButton(
                                   onPressed: () {
-
+                                    //function for uplaoding the property
+                                    uploadProperty();
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color.fromRGBO(74, 67, 236, 1.0),
