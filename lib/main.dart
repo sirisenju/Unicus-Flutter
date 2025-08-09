@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_class_git/dashboard.dart';
+import 'package:flutter_class_git/screens/admin/add_listings.dart';
 import 'package:flutter_class_git/screens/admin/dashboard.dart';
+import 'package:flutter_class_git/screens/admin/properties.dart';
 import 'package:flutter_class_git/screens/auth/auth.dart';
 import 'package:flutter_class_git/screens/auth/login.dart';
 import 'package:flutter_class_git/screens/auth/register.dart';
@@ -46,6 +48,9 @@ class MyApp extends StatelessWidget {
         '/home': (context) => BottomNav(),
         '/chats': (context) => ChatDetail(),
         '/chat': (context) => ChatScreen(),
+        '/properties': (context) => PropertyScreen(),
+        '/add/listings': (context) => AddListings(),
+
 
 
       },
