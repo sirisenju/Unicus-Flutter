@@ -35,7 +35,7 @@ class AdminSidebar extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),),
               onTap: (){
-                Navigator.pushReplacementNamed(context, '/');
+                Navigator.pushReplacementNamed(context, '/add/listings');
               },
             ),
             ListTile(
@@ -45,7 +45,7 @@ class AdminSidebar extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),),
               onTap: () {
-                Navigator.pushNamed(context, '/properties');
+                Navigator.pushReplacementNamed(context, '/properties');
               },
             ),
           ]

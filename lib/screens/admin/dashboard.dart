@@ -50,18 +50,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Text("Welcome Admin", style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900
-
-                ),)
-              ],
-            ),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Center(
+          child: Text("Welcome Admin"),
         ),
       ),
     );
