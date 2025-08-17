@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
-
 class PropertyCard extends StatelessWidget {
+  final String price;
+  final String locationDetails;
+  final String imageUrl;
+
+  const PropertyCard({
+    Key? key,
+    required this.price,
+    required this.locationDetails,
+    required this.imageUrl,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -13,7 +23,7 @@ class PropertyCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             image: DecorationImage(
-              image: NetworkImage('https://images.unsplash.com/photo-1560185127-6ed189bf019d'),
+              image: NetworkImage(imageUrl),
               fit: BoxFit.cover,
             ),
           ),
@@ -22,11 +32,10 @@ class PropertyCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Premium Land 24', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text('\$24,563', style: TextStyle(color: Colors.deepPurple)),
+            Text(price, style: TextStyle(color: Colors.deepPurple)),
           ],
         ),
-        Text('Abuja area 22 • 100x100 • Flat • Cleared', style: TextStyle(color: Colors.grey)),
+        Text(locationDetails, style: TextStyle(color: Colors.grey)),
         Row(
           children: [
             Expanded(

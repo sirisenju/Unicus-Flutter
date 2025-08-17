@@ -20,7 +20,7 @@ class _PropertyScreenState extends State<PropertyScreen> {
   }
   //FETCH DATA FROM SUPABSE
   Future<List<PropertyModel>> fetchProperties() async {
-    final supabaseClient = Supabase.instance.client; // Renamed for clarity
+    final supabaseClient = Supabase.instance.client;
 
     try {
       final response = await supabaseClient.from('properties').select();
@@ -58,9 +58,6 @@ class _PropertyScreenState extends State<PropertyScreen> {
       print("Error deleting property: $e");
     }
   }
-
-
-
 
   @override
   void initState() {
@@ -142,10 +139,21 @@ class _PropertyScreenState extends State<PropertyScreen> {
                             IconButton(
                               icon: const Icon(Icons.edit, color: Colors.blue),
                               tooltip: 'Edit',
-                              onPressed: () {
-                                print("Edit pressed for property ID: ${property.id}");
+                              onPressed: () async {
+                                final shouldRefresh = await Navigator.pushNamed(
+                                  context,
+                                  '/edit/property',
+                                  arguments: property.id,
+                                );
+
+                                if (shouldRefresh == true) {
+                                  setState(() {
+                                    _properties = fetchProperties();
+                                  });
+                                }
                               },
                             ),
+
                             IconButton(
                               icon: const Icon(Icons.delete, color: Colors.red),
                               tooltip: 'Delete',

@@ -127,55 +127,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            //DISPLAYING OUR ITEMS
-            Container(
-              height: 500,
-              child: FutureBuilder<List<PropertyModel>>(
-                future: _properties,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
 
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
+            FutureBuilder<List<PropertyModel>>(
+              future: _properties, // use the cached future from initState
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No properties found.'));
+                }
 
-                  final data = snapshot.data;
-                  print("Data is: $data");
-                  if (data == null || data.isEmpty) {
-                    return Center(child: Text('No data available'));
-                  }
-                  return ListView.builder(
-                      itemCount:  data.length,
-                      itemBuilder: (context, index){
-                        final item = data[index];
-                        return Container(
-                          child: Column(
-                            children: [
-                              Text(item.location),
-                              Text(item.ownerId),
-                              Text(item.description),
-                              Text("${item.price}"),
-                              Text("${item.propertyType}"),
-                              Image(image: NetworkImage(item.imageUrl)),
-                              Text("${item.bedrooms}"),
-                              Text("${item.bathrooms}"),
-                              Text("${item.sizeSqft}"),
-                              Text("${item.createdAt}"),
-                              Text("${item.updatedAt}"),
-                            ],
-                          ),
-                        );
-                      }
-                  );
-                },
-              ),
+                final properties = snapshot.data!;
+                return ListView.builder(
+                  shrinkWrap: true, // so it works inside another ListView
+                  physics: NeverScrollableScrollPhysics(), // prevent scroll conflict
+                  itemCount: properties.length,
+                  itemBuilder: (context, index) {
+                    final property = properties[index];
+                    return PropertyCard(
+                      price: '\$${property.price}',
+                      locationDetails: property.location,
+                      imageUrl: property.imageUrl,
+                    );
+                  },
+                );
+              },
             ),
 
 
-            //TODO: MAKE THE PROPERTY DYNAMIC TO TAKE IN THE NECESSARY INFOR TO BUILD
-            PropertyCard(),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
